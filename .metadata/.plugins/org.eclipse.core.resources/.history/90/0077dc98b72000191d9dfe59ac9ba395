@@ -1,0 +1,220 @@
+import java.util.Random;
+
+public class Game 
+{
+	private InputChecker inputChecker;
+	private String[] treasureLootTable = {"gold","broken glass", "a monster"};
+	private Player player;
+	Game()
+	{
+		inputChecker = new InputChecker();
+		player = new Player();
+	}
+	
+	public void run()
+	{
+		tutorial();
+		gameLoop();
+	}
+	private void tutorial()
+	{
+		GameCreation gameCharacterCreation= new GameCreation(player, inputChecker);
+		player = gameCharacterCreation.creationStarted();
+		System.out.println("You are surrounded by darkness, with no visible light anywhere");
+	}
+	private void gameLoop()
+	{
+		while(player.isDead==false)
+		{
+			System.out.println("you have headed " + inputChecker.getDirectionStringInput().toLowerCase());
+			inputChecker.breakLineConv();
+			randomEncounter();
+		}
+	}
+	
+	private int randomTable(int maxrange)
+	{
+		Random rand = new Random();
+		return rand.nextInt(maxrange)+1;	
+	}
+	
+	private void randomEncounter()
+	{
+		int randomTableNumber = randomTable(3);
+		switch(randomTableNumber)
+		{
+			case 1: 
+				System.out.println("There seems to be nothing here, lets continue on " + player.getName() + ".");
+				inputChecker.breakLineConv();
+				break;
+			case 2: 
+				System.out.println("There seems to be treasure ahead, lets check it out " + player.getName() + ".");
+					treasureTable();
+				break;
+			case 3: 
+				System.out.println("A monster has been seen the player \""  + player.getName() + "\".");
+				monsterEncounterBegin();
+				break;
+		}
+	}
+	
+	private void monsterEncounterBegin()
+	{
+		//these are a list of possible strings allowed to be used
+		String[] acceptableInput = {"y","n","yes","no"};
+		System.out.println("Do you want to attempt to sneak past ,Yes or No.");
+		String input = "";
+		boolean badInput = true;
+		while(badInput)
+		{
+			input = inputChecker.getString().toLowerCase();
+			if(inputChecker.checkStringAgainstArgs(input,acceptableInput))
+			{
+				badInput = false;
+			}
+		}
+		if(input.charAt(0)=='y')
+		{
+			if(randomTable(10)<8)
+			{
+				System.out.println("\"" + player.getName() + "\" has failed to sneak past");
+				monsterCombat();
+			}
+			else
+			{
+				System.out.println("\"" + player.getName() + "\" was successful at sneaking past");
+			}
+		}
+		else
+		{
+			monsterCombat();
+		}
+		
+			
+	}
+	private void monsterCombat()
+	{
+		int monsterLevel = player.getLevel()>3? randomTable(2):player.getLevel();
+		Monster monster = new Monster(monsterLevel, monsterLevel+randomTable(2), monsterLevel+1, (monsterLevel+randomTable(1)), monsterLevel); //attack may be 1 higher than base
+		System.out.println("combat will begin now");
+		while(!monster.getIsDead() & !player.getIsDead())
+		{
+			player.showStats();
+			System.out.println("              versus          ");
+			monster.showStats();
+			int move = inputChecker.getIntegerInput(0, 4, "1 = Attack \n2 = Defence \n3 = Skills");
+			inputChecker.breakLineConv();
+			combatMove(move,monster,player); //player move
+			if(!monster.getIsDead())
+			{
+				combatMove(randomTable(2),player,monster); //monster move
+			}		
+		}
+		if(monster.getIsDead())
+		{
+			System.out.println("the fight with the " + monster.getName() + " has ended");
+			player.addExp(monster.getExpOnDeath());
+		}
+		else
+		{
+			if(player.getCharacterClass().equals("Town Drunk"))
+			{
+				System.out.println("\"" + player.getName() + "\"" + " our trust in you was misplaced it seems\n GAME OVER!");
+			}
+			else
+			{
+				System.out.println("\"" + player.getName() + "\"" + " Has died.\n GAME OVER!");		
+			}		
+		}
+		
+		
+	}
+	private void combatMove(int move,Character opponent,Character characterThatsMoving)
+	{	
+		int damage =0;
+		if(move==1)
+		{
+			damage =0;
+			if(criticalHit())
+			{
+				damage = (int) (characterThatsMoving.getAttack() * (float)2.5);
+			}
+			else
+			{	
+				damage = characterThatsMoving.getAttack();			
+			}
+			System.out.println(characterThatsMoving.getName() + " dealt " + (damage/opponent.getDamageReduction()) + " damage to the " + opponent.getName() + ".");
+			opponent.setHp(opponent.getHp()-damage);
+			characterThatsMoving.setDamageReduction(1); //since the player has attacked he no longer is blocking
+		}
+		else if(move==2)
+		{			
+			System.out.println("\"" + characterThatsMoving .getName() + "\" is blocking");
+			characterThatsMoving.setDamageReduction(2);
+		}
+		else if(move ==3)
+		{
+			System.out.println(player.getName() + " has selected Skills");
+			player.loadSpells();
+			int spellToUsed = inputChecker.getIntegerInput(0,player.spellsUsable()+1 , "enter the spells number");
+			castPlayerSpell(spellToUsed,opponent,characterThatsMoving);
+			
+		}
+		
+	}
+	private void castPlayerSpell(int spellNumber,Character opponent,Character characterThatsMoving)
+	{
+		
+		Spells spell = player.getSpellFromList(spellNumber);
+		if(player.getMana()-spell.getManaCost()>0)
+		{
+			System.out.println(player.getName() + " has selected " + spell.getName());
+			System.out.println(characterThatsMoving.getName() + " used " + spell.getName() +  " and it dealt " + spell.getDamage() + " damage to the " + opponent.getName() + ".");
+			opponent.setHp(opponent.getHp()-spell.getDamage());
+			characterThatsMoving.setDamageReduction(1); //since the player has attacked he no longer is blocking
+		}
+		else
+		{
+			System.out.println(player.getName() + " does not have enough mana to use  " + spell.getName());
+		}
+
+		
+	}
+	private void treasureTable()
+	{
+		int randomNumber = randomTable(treasureLootTable.length)-1;
+		System.out.print(player.getName() + " has found " + treasureLootTable[randomNumber]);
+		switch(treasureLootTable[randomNumber])
+		{
+			case "gold": 
+				player.addGold(player.getLevel() * randomTable(30)); 
+				System.out.println(" " + player.getName() + " has now " + player.getGold() + " gold.");
+				break;
+			case "broken glass": 
+				player.setHp(player.getHp()-1); 
+				System.out.println(player.getName() + " has taken 1 damage from the glass, and now has " + player.getHp() + "hp.");
+			break;
+			case "a monster": 
+				System.out.println(" instead of the treasure");
+				monsterEncounterBegin(); 
+			break;
+		}
+		inputChecker.breakLineConv();
+	}
+	private void lootTable()
+	{
+		
+	}
+	
+	private boolean criticalHit()
+	{
+		int randomNumber;
+		randomNumber = randomTable(10);
+		if(randomNumber>8)
+		{
+			return true;
+		}
+		return false;
+	}
+}
+

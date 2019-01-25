@@ -1,0 +1,8 @@
+Fireball
+1
+5
+1
+Greater Fireball
+2
+12
+3

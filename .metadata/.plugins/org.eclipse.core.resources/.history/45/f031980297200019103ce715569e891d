@@ -1,0 +1,9 @@
+
+public class Monster 
+{
+	Monster(int level)
+	{
+		this.level = level;
+		
+	}
+}

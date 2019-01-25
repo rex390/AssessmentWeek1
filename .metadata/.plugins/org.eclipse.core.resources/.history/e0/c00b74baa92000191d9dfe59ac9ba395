@@ -1,0 +1,7 @@
+
+public class Spells 
+{
+	String name;
+	int manaCost;
+	int damage;
+}

@@ -1,0 +1,8 @@
+Smash
+1
+5
+1
+Greater Smash
+2
+12
+3

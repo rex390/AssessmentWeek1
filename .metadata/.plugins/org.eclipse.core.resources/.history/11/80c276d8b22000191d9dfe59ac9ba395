@@ -1,0 +1,79 @@
+
+public class Player extends Character
+{
+
+
+	String characterClass;
+	private int gold;
+	private int expNeeded;
+	private int defaultHp,defaultMana;
+	private ArrayList<Spells> spells = new ArrayList<Spells>();
+	Player()
+	{
+		this.level = 1;
+		this.expNeeded = 10;
+		this.gold = 0;
+	}
+	
+	public int getDefaultHp() 
+	{
+		return defaultHp;
+	}
+
+	public void setDefaultHp(int defaultHp) 
+	{
+		this.defaultHp = defaultHp;
+	}
+
+	public int getDefaultMana() 
+	{
+		return defaultMana;
+	}
+
+	public void setDefaultMana(int defaultMana) 
+	{
+		this.defaultMana = defaultMana;
+	}
+
+	public int getGold() 
+	{
+		return gold;
+	}
+	public void addGold(int gold) 
+	{
+		this.gold += gold;
+	}
+	public String getCharacterClass() 
+	{
+		return characterClass;
+	}
+
+	public void setClass(String characterClassPassed) 
+	{
+		characterClass = characterClassPassed;
+	}
+	public void addExp(int expNeededPassed) 
+	{
+		
+		int remainingExp = this.expNeeded - expNeededPassed;
+		if(remainingExp<0)
+		{
+			this.level++;
+			setHp(getDefaultHp() + 3); 
+			setAttack(getAttack() + 2);
+			setMana(getDefaultMana() + 2); 
+			expNeeded = (this.level*10);
+			System.out.println("Gratz " + this.name + " you have leveled up.");
+			showStats();
+			addExp(remainingExp*-1); //recurse thru until exp is not less than 0 ( so if u need 1 exp more to level up and you get 20 you level up and 
+									//still get the 19 exp added onto new bar
+		}
+		else
+		{
+			expNeeded -= expNeededPassed;
+		}
+		System.out.println(this.name + " needs now " + expNeeded + "xp to level up");
+		
+	}
+	
+}

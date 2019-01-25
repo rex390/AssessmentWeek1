@@ -1,0 +1,50 @@
+
+public class Player extends Character
+{
+
+
+	String characterClass;
+	private int gold;
+	private int expNeeded;
+	Player()
+	{
+		this.level = 1;
+		this.expNeeded = 10;
+		this.gold = 0;
+	}
+	public int getGold() 
+	{
+		return gold;
+	}
+	public void addGold(int gold) 
+	{
+		this.gold += gold;
+	}
+	public String getCharacterClass() 
+	{
+		return characterClass;
+	}
+
+	public void setClass(String characterClassPassed) 
+	{
+		characterClass = characterClassPassed;
+	}
+	public void setExpNeeded(int expNeeded) 
+	{
+		
+		int remainingExp = this.expNeeded - expNeeded;
+		{
+			System.out.println("remaining exp = " + remainingExp);
+		}
+		if(remainingExp<0)
+		{
+			this.level++;
+			setHp(getHp() + 3); 
+			setAttack(getAttack() + 2);
+			setMana(getMana() + 2); 
+			expNeeded = expNeeded + (this.level*3);
+		}
+		if(expNeeded)
+	}
+	
+}

@@ -1,0 +1,13 @@
+
+public class Monster extends Character 
+{
+	Monster(int level,int hp,int mana,int attack,int defence)
+	{
+		this.name = "Monster"
+		this.level = level;
+		this.hp = hp;
+		this.mana = mana;
+		this.attack = attack;
+		this.defence = defence;
+	}
+}

@@ -1,0 +1,8 @@
+
+public abstract class Character 
+{
+	int hp;
+	int mana;
+	int attack;
+	int defence;
+}

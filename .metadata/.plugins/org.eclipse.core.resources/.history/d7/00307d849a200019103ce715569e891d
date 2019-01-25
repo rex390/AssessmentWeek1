@@ -1,0 +1,26 @@
+import java.util.Random;
+
+public class Monster extends Character 
+{
+	Monster(int level,int hp,int mana,int attack,int defence)
+	{
+		this.name = setUpName();
+		this.level = level;
+		this.hp = hp;
+		this.mana = mana;
+		this.attack = attack;
+		this.defence = defence;
+		
+	}
+	public String setUpName()
+	{
+		String[][] monsterNameGenerator = new String[2][];
+		monsterNameGenerator[0] = new String[]{"Fire","Water","Earth","Wind", "Raging" , "Ghastly"};
+		monsterNameGenerator[1] = new String[]{"Orc","Human","Goblin","Slime", "Skeleton"};
+		
+		Random rand = new Random();
+		System.out.println(rand.nextInt(monsterNameGenerator[0].length));
+		return monsterNameGenerator[(int) rand.nextInt(monsterNameGenerator[0].length)][(int) rand.nextInt(monsterNameGenerator[1].length)];
+		
+	}
+}

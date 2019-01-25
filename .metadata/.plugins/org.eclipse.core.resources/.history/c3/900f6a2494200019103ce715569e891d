@@ -1,0 +1,84 @@
+import java.util.Scanner;
+
+public class InputChecker 
+{
+	private Scanner inputScanner;
+
+	public InputChecker() 
+	{
+		inputScanner = new Scanner(System.in);
+	}
+	
+	public String getDirectionStringInput()
+	{
+		System.out.println("which direction shall you move: north, east ,south, or west");
+		boolean loopInput = true;
+		String input = "";
+		while(loopInput)
+		{
+			input =inputScanner.nextLine();
+			loopInput = correctDirectionInput(input);
+		}
+		return input;
+	}
+	
+	public String getString()
+	{
+		boolean loopInput = true;
+		String input = "";
+		while(loopInput)
+		{
+			input =inputScanner.nextLine();
+			loopInput = (input !=""?false:true);
+		}
+		return input;
+	}
+	public boolean checkStringAgainstArgs(String input,String...strings)
+	{
+		String[] acceptableAnswers= strings;
+		for(String  acceptableAnswer: acceptableAnswers)
+		{
+			if(acceptableAnswer.equals(input))
+			{
+				return true;
+			}
+		}
+		System.out.println("please enter a valid keyword (yes no y n)");
+		return false;
+	}
+	public boolean correctDirectionInput(String testingInput)
+	{
+		testingInput = testingInput.toLowerCase();
+		switch(testingInput)
+		{
+			case "east": return false;
+			case "west": return false;
+			case "north": return false;
+			case "south": return false;
+			default : System.out.println("please enter valid keyword input ( north east south west");
+				return true;
+		}		
+	}
+	public int getIntegerInput(int minRange,int maxRange)
+	{
+		boolean loopInput = true;
+		String input = "";
+		while(loopInput)
+		{
+			input =inputScanner.nextLine();
+			loopInput = checkIntegerInput(input,minRange,maxRange);	
+		}
+		return Integer.parseInt(input);
+	}
+	
+	public boolean checkIntegerInput(String input,int minRange,int maxRange)
+	{
+		boolean correctIntInput=false;		
+		int testInput = Integer.parseInt(input);
+		if(testInput>minRange & testInput <maxRange)
+		{
+			return correctIntInput;
+		}
+		return correctIntInput;				
+	}
+}

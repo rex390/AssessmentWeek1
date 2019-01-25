@@ -1,0 +1,64 @@
+import java.util.Scanner;
+
+public class InputChecker 
+{
+	private Scanner inputScanner;
+
+	public InputChecker() 
+	{
+		inputScanner = new Scanner(System.in);
+	}
+	
+	public String getDirectionStringInput()
+	{
+//		loop if not correct
+		boolean loopInput = true;
+		String input = "";
+		while(loopInput)
+		{
+			input =inputScanner.nextLine();
+			loopInput = correctDirectionInput(input);
+			
+//			do correct thing with input 
+		}
+		return input;
+	}
+	public boolean correctDirectionInput(String testingInput)
+	{
+		testingInput = testingInput.toLowerCase();
+		switch(testingInput)
+		{
+			case "east": return false;
+			case "west": return false;
+			case "north": return false;
+			case "south": return false;
+			default : System.out.println("please enter valid input");
+				return true;
+		}		
+	}
+	public String getIntegerInput(int minRange,int maxRange)
+	{
+//		loop if not correct
+		boolean loopInput = true;
+		String input = "";
+		while(loopInput)
+		{
+			input =inputScanner.nextLine();
+			
+			loopInput = checkIntegerInput(input,minRange,maxRange);	
+//			do correct thing with input 
+		}
+		return input;
+	}
+	
+	public boolean checkIntegerInput(String input,int minRange,int maxRange)
+	{
+		boolean correctIntInput=false;		
+		int testInput = Integer.parseInt(input);
+		if(testInput>minRange & testInput <maxRange)
+		{
+			return correctIntInput;
+		}
+		return correctIntInput;				
+	}
+}

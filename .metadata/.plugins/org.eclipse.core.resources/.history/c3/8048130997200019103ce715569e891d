@@ -1,0 +1,9 @@
+
+public class Monster extends Character 
+{
+	Monster(int level)
+	{
+		this.level = level;
+		
+	}
+}
